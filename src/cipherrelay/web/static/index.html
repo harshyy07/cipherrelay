@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherRelay — End-to-End Encrypted Messenger</title>
+  <meta name="description" content="Portfolio-grade Zero-Knowledge E2EE Chat and File Sharing Application built with libsodium and X3DH.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal">
+    <div class="auth-card glass-panel">
+      <div class="brand-badge">🛡️ Zero-Knowledge Relay</div>
+      <h1 class="auth-title">CipherRelay</h1>
+      <p class="auth-desc">Ed25519 & X25519 authenticated sessions. Your private keys never leave your device.</p>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="username-input">Username</label>
+          <input type="text" id="username-input" class="input-field" placeholder="e.g. alice, bob, mohi" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="passphrase-input">Keystore Passphrase (Argon2id)</label>
+          <input type="password" id="passphrase-input" class="input-field" placeholder="Enter passphrase to unlock or create keys" required>
+        </div>
+        <button type="submit" id="btn-login" class="btn-primary">Unlock & Authenticate</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Safety Number Modal -->
+  <div id="safety-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">🔐 Safety Number Verification</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">
+        Compare this numeric fingerprint with your contact out-of-band (e.g. in person or on a call) to verify there is no Man-in-the-Middle attack.
+      </p>
+      <div id="safety-number-value" class="fingerprint-display">000000 000000</div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="btn-close-safety" class="btn-icon">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Three-Column Application Layout -->
+  <div id="app-container">
+    
+    <!-- Left Column: User & Contacts Sidebar -->
+    <aside class="sidebar glass-panel">
+      <div class="sidebar-header">
+        <div class="user-profile">
+          <div id="user-avatar" class="avatar">?</div>
+          <div class="user-meta">
+            <div id="current-username" class="name">Offline</div>
+            <div class="status"><span class="status-dot"></span> Protected</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="new-contact-input" class="input-field" placeholder="+ Message user (e.g. bob)">
+      </div>
+
+      <ul id="contact-list" class="contact-list">
+        <!-- Dynamically populated contacts -->
+      </ul>
+    </aside>
+
+    <!-- Middle Column: Active Conversation -->
+    <main class="chat-area">
+      <header class="chat-header">
+        <div class="recipient-info">
+          <div id="recipient-avatar" class="avatar" style="background: var(--grad-cyan);">?</div>
+          <div>
+            <div id="recipient-name" style="font-weight: 700; font-size: 1.05rem;">Select a Contact</div>
+            <div style="font-size: 0.75rem; color: var(--accent-cyan);">🔒 E2EE Session: X3DH Handshake Active</div>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <button id="btn-verify-contact" class="btn-icon">🔍 Verify Safety Number</button>
+        </div>
+      </header>
+
+      <div id="message-stream" class="message-stream">
+        <div style="margin: auto; text-align: center; color: var(--text-dim); max-width: 320px;">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;">🛡️</div>
+          <p style="font-size: 0.9rem;">Messages and files are encrypted end-to-end with XChaCha20-Poly1305. The server only relays ciphertext blobs.</p>
+        </div>
+      </div>
+
+      <footer class="chat-input-bar">
+        <input type="file" id="file-input" style="display: none;">
+        <button id="btn-attach-file" class="btn-icon" title="Send Encrypted File">📎</button>
+        <div class="input-wrapper">
+          <input type="text" id="chat-text-input" class="input-field" placeholder="Type an encrypted message..." autocomplete="off">
+        </div>
+        <button id="btn-send-message" class="btn-send">➤</button>
+      </footer>
+    </main>
+
+    <!-- Right Column: Live Crypto Protocol Inspector -->
+    <aside class="inspector-panel">
+      <div class="inspector-header">
+        <span>⚡ Crypto Inspector</span>
+        <span class="inspector-badge">LIVE WIRETAP</span>
+      </div>
+      <div id="inspector-feed" class="inspector-feed">
+        <!-- Live wire protocol packets and ratchet events -->
+      </div>
+    </aside>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
